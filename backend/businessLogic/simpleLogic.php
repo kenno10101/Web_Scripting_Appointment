@@ -9,17 +9,34 @@ class SimpleLogic
         $this->dh = new DataHandler();
     }
 
-    function handleRequest($method, $param)
+    function handleRequest($request_method, $method, $param)
     {
-        switch ($method) {
-            case "queryAppointments":
-                $res = $this->dh->queryAppointments();
+        switch ($request_method) {
+            case "GET":
+                switch ($method) {
+                    case "queryAppointments":
+                        $res = $this->dh->queryAppointments();
+                        break;
+                    case "queryAppointmentById":
+                        $res = $this->dh->queryAppointmentById($param);
+                        break;
+                    case "queryUserById":
+                        //$res = $this->dh->queryUserById($param["param"]);
+                        break;
+                    default:
+                        $res = null;
+                        break;
+                }
                 break;
-            case "queryAppointmentById":
-                $res = $this->dh->queryAppointmentById($param);
-                break;
-            case "queryUserById":
-                //$res = $this->dh->queryUserById($param);
+            case "POST":
+                switch ($method) {
+                    case "addAppointment":
+                        $res = $this->dh->addAppointment($param);
+                        break;
+                    default:
+                        $res = null;
+                        break;
+                }
                 break;
             default:
                 $res = null;

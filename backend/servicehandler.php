@@ -1,25 +1,42 @@
 <?php
 include ("businessLogic/simpleLogic.php");
 
+$request_method = $_SERVER['REQUEST_METHOD'];
 $param = "";
 $method = "";
 
-isset($_GET["method"]) ? $method = $_GET["method"] : false;
-isset($_GET["param"]) ? $param = $_GET["param"] : false;
+
 
 $logic = new SimpleLogic();
-$result = $logic->handleRequest($method, $param);
-if ($result == null) {
-    response("GET", 400, null);
-} else {
-    response("GET", 200, $result);
+
+switch ($request_method) {
+    case "GET":
+        isset($_GET["method"]) ? $method = $_GET["method"] : false;
+        isset($_GET["param"]) ? $param = $_GET["param"] : false;
+        $result = $logic->handleRequest($request_method, $method, $param);
+        response("GET", $result != null ? 200 : 400, $result);
+        break;
+    case "POST":
+        $data = json_decode(file_get_contents('php://input'), true);
+        $method = $data['method'];
+        $param = $data['param'];
+        $result = $logic->handleRequest($request_method, $method, $param);
+        response("POST", $result != null ? 200 : 400, $result);
+        break;
+    default:
+        response($method, 405, "Method not supported yet!");
 }
 
-function response($method, $httpStatus, $data)
+
+function response($request_method, $httpStatus, $data)
 {
     header('Content-Type: application/json');
-    switch ($method) {
+    switch ($request_method) {
         case "GET":
+            http_response_code($httpStatus);
+            echo (json_encode($data));
+            break;
+        case "POST":
             http_response_code($httpStatus);
             echo (json_encode($data));
             break;

@@ -2,6 +2,25 @@
 $(document).ready(function () {
     loadAppointments();
 });
+
+
+$("#addAppointmentForm").submit(function (event) {
+    event.preventDefault();
+
+    var appointment = {
+        method: "addAppointment",
+        param: {
+            title: $("#title").val(),
+            location: $("#location").val(),
+            date: $("#date").val(),
+            expiryDate: $("#expiryDate").val()
+        }
+    };
+
+    addAppointment(appointment);
+});
+
+
 function loadAppointments() {
     $.ajax({
         type: "GET",
@@ -27,6 +46,21 @@ function createAppointmentList(data) {
     console.log(data);
     $.each(data, function (index, appointment) {
         $("#appointmentList").append("<li><p id='appointment" + index + 1 + "'>" + appointment.title + " " + appointment.location + " " + appointment.date + " " + appointment.expiryDate + "</p><button id='viewButton" + index + 1 + "' onclick='viewAppointment(" + (index + 1) + ")'>View</button></li>");
+    });
+}
+
+function addAppointment(appointment) {
+    $.ajax({
+        type: "POST",
+        url: "../../backend/serviceHandler.php",
+        data: JSON.stringify(appointment),
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            // Reload the appointments after adding a new one
+            loadAppointments();
+        }
     });
 }
 

@@ -45,4 +45,15 @@ class DataHandler
         }
         return $appointment->toArray();
     }
+
+    public function addAppointment($appointment)
+    {
+
+        $sql = "INSERT INTO Appointment (title, location, date, expiryDate) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $appointment["title"], $appointment["location"], $appointment["date"], $appointment["expiryDate"]);
+
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
 }
