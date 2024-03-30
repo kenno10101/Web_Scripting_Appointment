@@ -46,9 +46,24 @@ function createAppointmentList(data) {
     console.log("Data:");
     console.log(data);
     $.each(data, function (index, appointment) {
-        $("#appointmentList").append("<tr id='appointment" + (index + 1) + "'><td>" + appointment.title + "</td><td>" + appointment.location + "</td><td>" + appointment.date + "</td><td>" + appointment.expiryDate + "</td><td><button class='btn btn-secondary' id='viewButton" + (index + 1) + "' onclick='viewAppointment(" + (index + 1) + ")'>View Details</button></td></tr>");
+        $("#appointmentList").append(`
+        <tr id='appointment${index + 1}'>
+            <td>${appointment.title}</td>
+            <td>${appointment.location}</td>
+            <td>${appointment.date}</td>
+            <td>${appointment.expiryDate}</td>
+            <td>
+                <button class='btn btn-secondary view-btn' id='viewButton${index + 1}'>View Details</button>
+            </td>
+        </tr>
+    `);
     });
 }
+
+$(document).on("click", ".view-btn", function () {
+    var index = $(this).closest("tr").attr("id").replace("appointment", "");
+    viewAppointment(index);
+});
 
 function addAppointment(appointment) {
     $.ajax({
@@ -93,6 +108,7 @@ function loadAppointmentById(id) {
 function createAppointmentDetails(appointment) {
     // Clear the details in case they already contain data
     $("#appointmentDetailsList").empty();
+    $("#appointmentDetailsDescription").empty();
 
 
     // Create a new list item for each detail
