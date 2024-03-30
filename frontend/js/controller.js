@@ -22,6 +22,47 @@ $("#addAppointmentForm").submit(function (event) {
 });
 
 
+$(document).on("click", ".view-btn", function () {
+    var index = $(this).closest("tr").attr("id").replace("appointment", "");
+    viewAppointment(index);
+});
+
+
+// Funktion zum Hinzufügen einer verfügbaren Zeit
+$("#addTimeOption").click(function () {
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    var appointmentId = $("#appointmentDetails").data("appointment-id");
+
+    var option = { start_time: startTime, end_time: endTime, appointment_id: appointmentId};
+
+    addTimeOption(option);
+
+
+});
+
+$("#submitVoting").click(function () {
+    var name = $("#name").val();
+    var comment = $("#comment").val();
+    var selectedTimes = [];
+
+    // Erfassen der ausgewählten Zeiten
+    //TODO: fix this
+    $(".timeOption:checked").each(function () {
+        var startTime = $(this).data('start');
+        var endTime = $(this).data('end');
+        selectedTimes.push({ startTime: startTime, endTime: endTime });
+    });
+
+    // Hier können Sie die Daten weiter verarbeiten, z.B. per AJAX an den Server senden
+    console.log("Name:", name);
+    console.log("Comment:", comment);
+    console.log("Selected Times:", selectedTimes);
+});
+
+
+
+
 function loadAppointments() {
     $.ajax({
         type: "GET",
@@ -60,10 +101,6 @@ function createAppointmentList(data) {
     });
 }
 
-$(document).on("click", ".view-btn", function () {
-    var index = $(this).closest("tr").attr("id").replace("appointment", "");
-    viewAppointment(index);
-});
 
 function addAppointment(appointment) {
     $.ajax({
@@ -80,12 +117,19 @@ function addAppointment(appointment) {
     });
 }
 
+function addTimeOption(option) {
+    //TODO: Implement AJAX call to add a new time option
+    //option has start, end and appointment id
+    console.log(option);
+}
+
 function viewAppointment(index) {
     // Get the ID of the appointment
     var appointmentId = index; // Replace this with the actual ID if it's not the index
 
     // Call loadAppointmentById with the ID
     $("#appointmentDetails").fadeIn();
+    $("#appointmentDetails").data("appointment-id", index);
     loadAppointmentById(appointmentId);
 }
 
@@ -97,7 +141,6 @@ function loadAppointmentById(id) {
         data: { method: "queryAppointmentById", param: id },
         dataType: "json",
         success: function (response) {
-            console.log(response);
 
             // Display the appointment details
             createAppointmentDetails(response);
@@ -106,23 +149,27 @@ function loadAppointmentById(id) {
 }
 
 function createAppointmentDetails(appointment) {
-    // Clear the details in case they already contain data
-    $("#appointmentDetailsList").empty();
-    $("#appointmentDetailsDescription").empty();
+    console.log(appointment);
+    $("#availableTimesList").empty();
 
+    $("#appointmentTitle").text(appointment.title);
+    $("#appointmentLocation").text(appointment.location);
+    $("#appointmentDate").val(appointment.date);
+    $("#appointmentExpiryDate").val(appointment.expiryDate);
 
-    // Create a new list item for each detail
-    $("#appointmentDetailsDescription").append("<li>Title: " + appointment.title + "</li>");
-    $("#appointmentDetailsDescription").append("<li>Location: " + appointment.location + "</li>");
-    $("#appointmentDetailsDescription").append("<li>Date: " + appointment.date + "</li>");
-    $("#appointmentDetailsDescription").append("<li>Expiry Date: " + appointment.expiryDate + "</li>");
-
-    // Create a list for appointment options
-    for (let i = 0; i < appointment.options.length; i++) {
-        $("#appointmentDetailsList").append("<tr><td>Start Time: " + appointment.options[i].start_time + "</td><td>End Time: " + appointment.options[i].end_time + "</td><td><input type='checkbox' id='voteBox" + (i + 1) + "' onclick='voteOption(" + (i + 1) + ")'></td></tr>");
+    // Loop through the available times and add a new list item for each entry
+    if (appointment.options.length == 0) {
+        $("#availableTimesList").append(`
+        <tr><td>No available times</td><td></td><td></td></tr>     `);
+    } else {
+        $.each(appointment.options, function (index, time) {
+            $("#availableTimesList").append(`
+                <tr id='time${index + 1}'>
+                    <td>${time.start_time}</td>
+                    <td>${time.end_time}</td>
+                    <td><input type='checkbox' class='timeOption'></input></td>
+                </tr>     
+            `);
+        });
     }
-    $.each(appointment.options, function (appointment) {
-        $("#appointmentDetailsList").append("<li>Start Time: " + appointment.options[i].start_time + "<input type='checkbox' name='' id=''></li>");
-        $("#appointmentDetailsList").append("<li>End Time: " + appointment.options[i].end_time + "<input type='checkbox' name='' id=''></li>");
-    });
 }

@@ -29,58 +29,77 @@
         </table>
       </div>
       <div class="col-sm-6" id="appointmentDetails">
-        <div class="row">
-          <div id="appointmentDetailsDescription">
-          </div>
-          <div id="appointmentDetailsList">
-            <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope=" col">Start Time</th>
-                  <th scope="col">End Time</th>
-                  <th scope="col">Vote</th>
-                </tr>
-              </thead>
-              <tbody class="table-light" id="appointmentList">
-              </tbody>
-            </table>
-          </div>
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name" placeholder="Enter your name to vote" aria-label="name"
-            aria-describedby="basic-addon2">
-          <label for="comment">Comment</label>
-          <textarea class="form-control" id="comment" aria-label="With textarea"
-            placeholder="Leave a comment (optional)"></textarea>
-          <input class="btn btn-primary" type="submit" value="Submit Appointment(s)">
+        <div id="appointmentDetailsDescription">
+          <h2>Appointment Details</h2>
+          <h3 id="appointmentTitle"></h3>
+          <p id="appointmentLocation"></p>
+          <input type="date" id="appointmentDate" disabled>
+          <input type="date" id="appointmentExpiryDate" disabled>
         </div>
+        <div>
+          <table class="table table-primary">
+            <thead>
+              <tr>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Vote</th>
+              </tr>
+            </thead>
+            <tbody class="table-light" id="availableTimesList">
+            </tbody>
+          </table>
+          <div class="mx-3">
+            <div class="mb-3">
+              <label for="startTime" class="form-label">Start Time</label>
+              <input type="time" class="form-control" id="startTime" />
+            </div>
+            <div class="mb-3">
+              <label for="endTime" class="form-label">End Time</label>
+              <input type="time" class="form-control" id="endTime" />
+            </div>
+            <button id="addTimeOption" class="btn btn-primary btn-sm">Add Time Option</button>
+          </div>
+        </div>
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your name to vote" aria-label="name"
+          aria-describedby="basic-addon2">
+        <label for="comment">Comment</label>
+        <textarea class="form-control" id="comment" aria-label="With textarea"
+          placeholder="Leave a comment (optional)"></textarea>
+        <button class="btn btn-primary" id="submitVoting"> Submit Voting</button>
       </div>
       <div class="col-sm"></div>
     </div>
-    <form id="addAppointmentForm">
-      <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input type="text" class="form-control" id="title" />
+    <div class="row">
+      <div class="col-12">
+        <h2>Add Appointment</h2>
+        <form id="addAppointmentForm">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" />
+          </div>
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" />
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" />
+          </div>
+          <div class="mb-3">
+            <label for="expiryDate" class="form-label">Expiry Date</label>
+            <input type="date" class="form-control" id="expiryDate" />
+          </div>
+          <button type="submit" class="btn btn-primary">Add Appointment</button>
+        </form>
       </div>
-      <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" id="location" />
-      </div>
-      <div class="mb-3">
-        <label for="date" class="form-label">Date</label>
-        <input type="date" class="form-control" id="date" />
-      </div>
-      <div class="mb-3">
-        <label for="expiryDate" class="form-label">Expiry Date</label>
-        <input type="date" class="form-control" id="expiryDate" />
-      </div>
-      <button type="submit" class="btn btn-primary">Add Appointment</button>
-    </form>
-  </body>
-  <script src="js/jquery-3.7.1.min.js"></script>
-  <script src="js/controller.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"
-  ></script>
+    </div>
+  </div>
+
+</body>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/controller.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 </html>
