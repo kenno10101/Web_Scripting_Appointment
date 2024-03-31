@@ -11,6 +11,7 @@ class Appointment
     public function toArray()
     {
         return [
+            "id" => $this->id,
             'title' => $this->title,
             'location' => $this->location,
             'date' => $this->date,
@@ -19,8 +20,9 @@ class Appointment
         ];
     }
 
-    public function __construct($title, $location, $date, $expiryDate, $options)
+    public function __construct($id, $title, $location, $date, $expiryDate, $options)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->location = $location;
         $this->date = $date;
@@ -32,19 +34,22 @@ class Appointment
 
 class Option
 {
+    private $id;
     private $start_time;
     private $end_time;
 
     public function toArray()
     {
         return [
+            'id' => $this->id,
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
         ];
     }
 
-    public function __construct($start_time, $end_time)
+    public function __construct($id, $start_time, $end_time)
     {
+        $this->id = $id;
         $this->start_time = $start_time;
         $this->end_time = $end_time;
     }
