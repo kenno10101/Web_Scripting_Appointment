@@ -184,6 +184,7 @@ function addAppointmentOption(appointmentOption) {
     });
 }
 
+// Funktion zum Abschicken der Voting(s) mit Name und Kommentar
 $("#submitVoting").click(function () {
     var name = $("#name").val();
     var comment = $("#comment").val();
@@ -201,21 +202,46 @@ $("#submitVoting").click(function () {
     var selectedTimes = [];
 
 
-    // Erfassen der ausgewählten Zeiten
+    // Erfassen der ausgewählten Zeiten und jeweils die Methode zum Einfügen aufrufen mit unterschiedlicher Zeit
     $(".appointmentOption:checked").each(function () {
         var time_id = $(this).closest("tr").attr("id").replace("time", "");
         selectedTimes.push({ id: time_id });
-    });
-    resetSubmitVotingForm();
 
+        var optionsVote = {
+            method: "addVote",
+            param: {
+                name: name,
+                options_id: time_id,
+                appointment_id: appointment_id,
+                comment: comment
+            }
+        };
+        addVote(optionsVote);
+    });
 
     console.log("Appointment ID:", appointment_id);
     console.log("Name:", name);
     console.log("Comment:", comment);
     console.log("Selected Times:", selectedTimes);
+
+    resetSubmitVotingForm();
+
+
 });
 
-
+function addVote(optionsVote) {
+    //vote has name, comment, appointment_id and option_id
+    $.ajax({
+        type: "POST",
+        url: "../../backend/serviceHandler.php",
+        data: JSON.stringify(optionsVote),
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            loadAppointmentById(optionsVote.param.appointment_id);
+        }
+    });
+}
 
 
 function resetAppointmentOptionForm() {

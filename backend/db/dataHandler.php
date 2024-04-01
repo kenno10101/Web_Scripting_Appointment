@@ -89,4 +89,12 @@ class DataHandler
         $stmt->execute();
         return $stmt->insert_id;
     }
+    public function addVote($vote)
+    {
+        $sql = "INSERT INTO options_voting (appointment_id, options_id, name, comment) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $vote["appointment_id"], $vote["options_id"], $vote["name"], $vote["comment"]);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
 }

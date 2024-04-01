@@ -36,6 +36,9 @@ class SimpleLogic
                     case "addAppointmentOption":
                         $res = $this->dh->addTimeOption($param);
                         break;
+                    case "addVote":
+                        $res = $this->dh->addVote($param);
+                        break;
                     default:
                         $res = null;
                         break;
