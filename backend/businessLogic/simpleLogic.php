@@ -20,9 +20,10 @@ class SimpleLogic
                     case "queryAppointmentById":
                         $res = $this->dh->queryAppointmentById($param);
                         break;
-                    case "queryUserById":
-                        //$res = $this->dh->queryUserById($param["param"]);
+                    case "queryVotingsByAppointmentId":
+                        $res = $this->dh->queryVotingsByAppointmentId($param);
                         break;
+
                     default:
                         $res = null;
                         break;
@@ -36,8 +37,9 @@ class SimpleLogic
                     case "addAppointmentOption":
                         $res = $this->dh->addTimeOption($param);
                         break;
-                    case "addVote":
-                        $res = $this->dh->addVote($param);
+                    case "addVotes":
+                        echo json_encode($param);
+                        $res = $this->dh->addVotes($param);
                         break;
                     default:
                         $res = null;

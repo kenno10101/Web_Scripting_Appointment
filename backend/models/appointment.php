@@ -32,20 +32,11 @@ class Appointment
 
 }
 
-class Option
+class Option implements JsonSerializable
 {
     private $id;
     private $start_time;
     private $end_time;
-
-    public function toArray()
-    {
-        return [
-            'id' => $this->id,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
-        ];
-    }
 
     public function __construct($id, $start_time, $end_time)
     {
@@ -54,5 +45,58 @@ class Option
         $this->end_time = $end_time;
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+        ];
+    }
+}
+
+
+
+class Voting implements JsonSerializable
+{
+    private $id;
+    private $name;
+    private $comment;
+
+    private $appointment_id;
+
+    private $options;
+
+
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'appointment_id' => $this->appointment_id,
+            'options' => $this->options,
+            'name' => $this->name,
+            'comment' => $this->comment,
+        ];
+    }
+
+    public function addOption($option)
+    {
+        $this->options[] = $option;
+    }
+
+    public function __construct($id, $appointment_id, $options, $name, $comment)
+    {
+        $this->id = $id;
+        $this->appointment_id = $appointment_id;
+        $this->options = is_array($options) ? $options : array();
+        $this->name = $name;
+        $this->comment = $comment;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }
 ?>

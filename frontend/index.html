@@ -38,41 +38,92 @@
             <input type="date" id="appointmentDate" disabled />
             <input type="date" id="appointmentExpiryDate" disabled />
           </div>
-          <div>
-            <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope="col">Start Time</th>
-                  <th scope="col">End Time</th>
-                  <th scope="col">Vote</th>
-                </tr>
-              </thead>
-              <tbody
-                class="table-light"
-                id="availableAppointmentOptions"
-              ></tbody>
-              <div id="error_votingCheckbox" class="text-danger"></div>
-            </table>
-            <div class="mx-3">
-              <div class="mb-3">
-                <label for="startTime" class="form-label">Start Time</label>
-                <input type="time" class="form-control" id="startTime" />
-              </div>
-              <div class="mb-3">
-                <label for="endTime" class="form-label">End Time</label>
-                <input type="time" class="form-control" id="endTime" />
-              </div>
-              <div class="d-flex">
+          <table class="table table-primary">
+            <thead>
+              <tr>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Vote</th>
+              </tr>
+            </thead>
+            <tbody class="table-light" id="availableAppointmentOptions"></tbody>
+            <div id="error_votingCheckbox" class="text-danger"></div>
+          </table>
+
+          <div class="accordion" id="timeOptionAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="timeOptionHeader">
                 <button
-                  id="submitAppointmentOption"
-                  class="btn btn-primary btn-sm"
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#timeOptionCollapse"
+                  aria-expanded="false"
+                  aria-controls="timeOptionCollapse"
                 >
-                  Add Time Option
+                  <b>Add a new time option</b>
                 </button>
-                <div
-                  id="error_appointmentOption"
-                  class="text-danger mx-3"
-                ></div>
+              </h2>
+              <div
+                id="timeOptionCollapse"
+                class="accordion-collapse collapse"
+                aria-labelledby="timeOptionHeader"
+                data-bs-parent="#timeOptionAccordion"
+              >
+                <div class="accordion-body">
+                  <div class="mx-3">
+                    <div class="mb-3">
+                      <label for="startTime" class="form-label"
+                        >Start Time</label
+                      >
+                      <input type="time" class="form-control" id="startTime" />
+                    </div>
+                    <div class="mb-3">
+                      <label for="endTime" class="form-label">End Time</label>
+                      <input type="time" class="form-control" id="endTime" />
+                    </div>
+                    <div class="d-flex">
+                      <button
+                        id="submitAppointmentOption"
+                        class="btn btn-primary btn-sm"
+                      >
+                        Add Time Option
+                      </button>
+                      <div
+                        id="error_appointmentOption"
+                        class="text-danger mx-3"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion" id="votingsAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="votingsHeader">
+                <button
+                  id="toggleVotingsButton"
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#votingsCollapse"
+                  aria-expanded="false"
+                  aria-controls="votingsCollapse"
+                >
+                  <b>See votings and comments</b>
+                </button>
+              </h2>
+              <div
+                id="votingsCollapse"
+                class="accordion-collapse collapse"
+                aria-labelledby="flush-headingOne"
+                data-bs-parent="#votingsAccordion"
+              >
+                <div class="accordion-body">
+                  <div class="mx-3" id="votings"></div>
+                </div>
               </div>
             </div>
           </div>

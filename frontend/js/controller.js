@@ -66,7 +66,6 @@ function createAppointmentDetails(appointment) {
     console.log("Appointment:");
     console.log(appointment);
     $("#availableAppointmentOptions").empty();
-
     $("#appointmentTitle").text(appointment.title);
     $("#appointmentLocation").text(appointment.location);
     $("#appointmentDate").val(appointment.date);
@@ -117,7 +116,6 @@ function addAppointment(appointment) {
         contentType: "application/json",
         dataType: "json",
         success: function (response) {
-            console.log(response);
             // Reload the appointments after adding a new one
             loadAppointments();
         }
@@ -136,6 +134,7 @@ function viewAppointment(index) {
 
     resetAppointmentOptionForm();
     resetSubmitVotingForm();
+    closeAllAccordions();
 
     // Call loadAppointmentById with the ID
     $("#appointmentDetails").fadeIn();
@@ -206,24 +205,18 @@ $("#submitVoting").click(function () {
     $(".appointmentOption:checked").each(function () {
         var time_id = $(this).closest("tr").attr("id").replace("time", "");
         selectedTimes.push({ id: time_id });
-
-        var optionsVote = {
-            method: "addVote",
-            param: {
-                name: name,
-                options_id: time_id,
-                appointment_id: appointment_id,
-                comment: comment
-            }
-        };
-        addVote(optionsVote);
     });
+    var optionsVote = {
+        method: "addVotes",
+        param: {
+            name: name,
+            selected_options: selectedTimes,
+            comment: comment,
+        }
+    };
+    console.log("Options Vote:", optionsVote);
 
-    console.log("Appointment ID:", appointment_id);
-    console.log("Name:", name);
-    console.log("Comment:", comment);
-    console.log("Selected Times:", selectedTimes);
-
+    addVote(optionsVote);
     resetSubmitVotingForm();
 
 
@@ -242,6 +235,73 @@ function addVote(optionsVote) {
         }
     });
 }
+
+$('#votingsAccordion').on('shown.bs.collapse', function () {
+    var appointment_id = $("#appointmentDetails").data("appointment-id");
+
+    console.log("Appointment ID:", appointment_id);
+    loadVotingsByAppointmentId(appointment_id);
+
+
+});
+
+function loadVotingsByAppointmentId(appointment_id) {
+    $.ajax({
+        type: "GET",
+        url: "../../backend/serviceHandler.php",
+        cache: false,
+        data: { method: "queryVotingsByAppointmentId", param: appointment_id },
+        dataType: "json",
+        success: function (response) {
+            createVotingsList(response);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("AJAX request failed:", textStatus, errorThrown);
+        }
+    });
+}
+
+function createVotingsList(data) {
+
+    // Loop through the data and add a new list item for each entry
+    console.log(data);
+    $.each(data, function (index, voting) {
+
+        // Create a new Bootstrap card for each voting
+        let votingCard = `
+        <div class="card">
+            <div class="card-header">
+                ${voting.name}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${voting.comment}</h5>
+                <p class="card-text">gevoted für</p>
+                <ul>
+    `;
+
+        // Add each option to the card
+        for (const option of voting.options) {
+            votingCard += `
+            <li>
+                ${option.start_time} - ${option.end_time}
+            </li>
+        `;
+        }
+
+        votingCard += `
+                </ul>
+            </div>
+        </div>
+    `;
+
+        // Append the card to the votings div
+        $('#votings').append(votingCard);
+    });
+}
+
+
+
 
 
 function resetAppointmentOptionForm() {
@@ -267,6 +327,12 @@ function resetAppointmentForm() {
     $("#location").val("");
     $("#date").val("");
     $("#expiryDate").val("");
+}
+
+function closeAllAccordions() {
+    $('#votings').empty();
+    $('.collapse').collapse('hide');
+
 }
 
 

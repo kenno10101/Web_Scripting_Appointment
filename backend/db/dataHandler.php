@@ -12,9 +12,9 @@ class DataHandler
         $this->conn = $conn;
     }
 
-    public function queryAppointmentOptions($id)
+    public function queryAppointmentOptionsByAppointmentId($id)
     {
-        $sql = "SELECT * FROM appointment_options WHERE appointment_id = ?";
+        $sql = "SELECT * FROM appointment_options WHERE appointment_fk = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -26,7 +26,7 @@ class DataHandler
             // output data of each row
             while ($row = $result->fetch_assoc()) {
                 $option = new Option($row["options_id"], $row["start_time"], $row["end_time"]);
-                $options[] = $option->toArray();
+                $options[] = $option;
             }
         }
 
@@ -38,12 +38,13 @@ class DataHandler
         $sql = "SELECT * FROM appointment";
         $result = $this->conn->query($sql);
 
+
         $appointments = array();
 
         if ($result->num_rows > 0) {
             // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $appointmentOptions = $this->queryAppointmentOptions($row["id"]);
+                $appointmentOptions = $this->queryAppointmentOptionsByAppointmentId($row["id"]);
                 $appointment = new Appointment($row["id"], $row["title"], $row["location"], $row["date"], $row["expiryDate"], $appointmentOptions);
                 $appointments[] = $appointment->toArray();
             }
@@ -64,10 +65,43 @@ class DataHandler
         $appointment = NULL;
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $appointmentOptions = $this->queryAppointmentOptions($row["id"]);
+            $appointmentOptions = $this->queryAppointmentOptionsByAppointmentId($row["id"]);
             $appointment = new Appointment($row["id"], $row["title"], $row["location"], $row["date"], $row["expiryDate"], $appointmentOptions);
         }
         return $appointment->toArray();
+    }
+
+    public function queryVotingsByAppointmentId($id)
+    {
+        $sql = "SELECT * FROM appointment_options INNER JOIN voting_list ON appointment_options.options_id = voting_list.option_fk INNER JOIN options_voting ON voting_list.voting_fk = options_voting.voting_id WHERE appointment_fk = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $votings = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $option = new Option($row["options_id"], $row["start_time"], $row["end_time"]);
+                if (isset($votings[$row["voting_id"]])) {
+                    // If a voting object with this ID already exists, add the option to it
+                    $votings[$row["voting_id"]]->addOption($option);
+                } else {
+                    // If it doesn't exist, create a new voting object
+                    $voting = new Voting($row["voting_id"], $row["appointment_fk"], [$option], $row["name"], $row["comment"]);
+                    $votings[$row["voting_id"]] = $voting;
+                }
+            }
+        }
+
+
+        return $votings;
+    }
+
+    public function queryAppointmentOptionById($id)
+    {
+
+
+
     }
 
     public function addAppointment($appointment)
@@ -83,18 +117,34 @@ class DataHandler
 
     public function addTimeOption($timeOption)
     {
-        $sql = "INSERT INTO appointment_options (appointment_id, start_time, end_time) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO appointment_options (appointment_fk, start_time, end_time) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sss", $timeOption["appointment_id"], $timeOption["start_time"], $timeOption["end_time"]);
         $stmt->execute();
         return $stmt->insert_id;
     }
-    public function addVote($vote)
+
+    public function addVotes($votes)
     {
-        $sql = "INSERT INTO options_voting (appointment_id, options_id, name, comment) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO options_voting (name, comment) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssss", $vote["appointment_id"], $vote["options_id"], $vote["name"], $vote["comment"]);
+        $stmt->bind_param("ss", $votes["name"], $votes["comment"]);
         $stmt->execute();
-        return $stmt->insert_id;
+        $inserted_id = $stmt->insert_id;
+        $this->addVoteIntoVotingList($votes["selected_options"], $inserted_id);
+
+        return $inserted_id;
     }
+    public function addVoteIntoVotingList($votes, $inserted_id)
+    {
+        foreach ($votes as $vote) {
+
+            $sql = "INSERT INTO voting_list (voting_fk, option_fk) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $inserted_id, $vote["id"]);
+            $stmt->execute();
+        }
+
+    }
+
 }
