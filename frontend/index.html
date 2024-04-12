@@ -1,195 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Appointment Finder</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/mystyle.css" />
-  </head>
 
-  <body>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12 col-lg-6">
-          <table class="table table-primary">
-            <thead>
-              <tr>
-                <th scope=" col">Title</th>
-                <th scope="col">Location</th>
-                <th scope="col">Date</th>
-                <th scope="col">Voting Expiry Date</th>
-                <th scope="col">Click to view details</th>
-              </tr>
-            </thead>
-            <tbody class="table-light" id="appointmentList"></tbody>
-          </table>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" href="css/mystyle.css" />
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <table class="table table-primary">
+          <thead>
+            <tr>
+              <th scope=" col">Title</th>
+              <th scope="col">Location</th>
+              <th scope="col">Date</th>
+              <th scope="col">Voting Expiry Date</th>
+              <th scope="col">Click to view details</th>
+            </tr>
+          </thead>
+          <tbody class="table-light" id="appointmentList"></tbody>
+        </table>
+        <div id="appointments_loading" style="display: none;">Loading...</div>
+      </div>
+      <div class="col-12 col-lg-6" id="appointmentDetails">
+        <div id="appointmentDetailsDescription">
+          <h2>Appointment Details</h2>
+          <div id="appointmentDetails_loading" style="display: none;">Loading...</div>
+          <h3 id="appointmentTitle"></h3>
+          <p id="appointmentLocation"></p>
+          <input type="date" id="appointmentDate" disabled />
+          <input type="date" id="appointmentExpiryDate" disabled />
         </div>
-        <div class="col-12 col-lg-6" id="appointmentDetails">
-          <div id="appointmentDetailsDescription">
-            <h2>Appointment Details</h2>
-            <h3 id="appointmentTitle"></h3>
-            <p id="appointmentLocation"></p>
-            <input type="date" id="appointmentDate" disabled />
-            <input type="date" id="appointmentExpiryDate" disabled />
-          </div>
-          <table class="table table-primary">
-            <thead>
-              <tr>
-                <th scope="col">Start Time</th>
-                <th scope="col">End Time</th>
-                <th scope="col">Vote</th>
-              </tr>
-            </thead>
-            <tbody class="table-light" id="availableAppointmentOptions"></tbody>
-            <div id="error_votingCheckbox" class="text-danger"></div>
-          </table>
+        <table class="table table-primary">
+          <thead>
+            <tr>
+              <th scope="col">Start Time</th>
+              <th scope="col">End Time</th>
+              <th scope="col">Vote</th>
+            </tr>
+          </thead>
+          <tbody class="table-light" id="availableAppointmentOptions"></tbody>
+          <div id="error_votingCheckbox" class="text-danger"></div>
+        </table>
 
-          <div class="accordion" id="timeOptionAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="timeOptionHeader">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#timeOptionCollapse"
-                  aria-expanded="false"
-                  aria-controls="timeOptionCollapse"
-                >
-                  <b>Add a new time option</b>
-                </button>
-              </h2>
-              <div
-                id="timeOptionCollapse"
-                class="accordion-collapse collapse"
-                aria-labelledby="timeOptionHeader"
-                data-bs-parent="#timeOptionAccordion"
-              >
-                <div class="accordion-body">
-                  <div class="mx-3">
-                    <div class="mb-3">
-                      <label for="startTime" class="form-label"
-                        >Start Time</label
-                      >
-                      <input type="time" class="form-control" id="startTime" />
-                    </div>
-                    <div class="mb-3">
-                      <label for="endTime" class="form-label">End Time</label>
-                      <input type="time" class="form-control" id="endTime" />
-                    </div>
-                    <div class="d-flex">
-                      <button
-                        id="submitAppointmentOption"
-                        class="btn btn-primary btn-sm"
-                      >
-                        Add Time Option
-                      </button>
-                      <div
-                        id="error_appointmentOption"
-                        class="text-danger mx-3"
-                      ></div>
-                    </div>
+        <div class="accordion" id="timeOptionAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="timeOptionHeader">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" id="addTImeOption"
+                data-bs-target="#timeOptionCollapse" aria-expanded="false" aria-controls="timeOptionCollapse">
+                <b>Add a new time option</b>
+              </button>
+            </h2>
+            <div id="timeOptionCollapse" class="accordion-collapse collapse" aria-labelledby="timeOptionHeader"
+              data-bs-parent="#timeOptionAccordion">
+              <div class="accordion-body">
+                <div class="mx-3">
+                  <div class="mb-3">
+                    <label for="startTime" class="form-label">Start Time</label>
+                    <input type="time" class="form-control" id="startTime" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="endTime" class="form-label">End Time</label>
+                    <input type="time" class="form-control" id="endTime" />
+                  </div>
+                  <div class="d-flex">
+                    <button id="submitAppointmentOption" class="btn btn-primary btn-sm">
+                      Add Time Option
+                    </button>
+                    <div id="error_appointmentOption" class="text-danger mx-3"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="accordion" id="votingsAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="votingsHeader">
-                <button
-                  id="toggleVotingsButton"
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#votingsCollapse"
-                  aria-expanded="false"
-                  aria-controls="votingsCollapse"
-                >
-                  <b>See votings and comments</b>
-                </button>
-              </h2>
-              <div
-                id="votingsCollapse"
-                class="accordion-collapse collapse"
-                aria-labelledby="flush-headingOne"
-                data-bs-parent="#votingsAccordion"
-              >
-                <div class="accordion-body">
-                  <div class="mx-3" id="votings"></div>
-                </div>
+        <div class="accordion" id="votingsAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="votingsHeader">
+              <button id="toggleVotingsButton" class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#votingsCollapse" aria-expanded="false"
+                aria-controls="votingsCollapse">
+                <b>See votings and comments</b>
+              </button>
+            </h2>
+            <div id="votingsCollapse" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+              data-bs-parent="#votingsAccordion">
+              <div class="accordion-body">
+                <div id="votings_loading" style="display: none;">Loading...</div>
+
+                <div class="mx-3" id="votings"></div>
               </div>
             </div>
           </div>
-          <label for="name">Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            placeholder="Enter your name to vote"
-            aria-label="name"
-            aria-describedby="basic-addon2"
-          />
-          <label for="comment">Comment</label>
-          <textarea
-            class="form-control"
-            id="comment"
-            aria-label="With textarea"
-            placeholder="Leave a comment (optional)"
-          ></textarea>
-          <div class="d-flex">
-            <button class="btn btn-primary" id="submitVoting">
-              Submit Voting
-            </button>
-            <div id="error_submitVoting" class="text-danger mx-3"></div>
-          </div>
         </div>
-        <div class="col-sm"></div>
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your name to vote" aria-label="name"
+          aria-describedby="basic-addon2" />
+        <label for="comment">Comment</label>
+        <textarea class="form-control" id="comment" aria-label="With textarea"
+          placeholder="Leave a comment (optional)"></textarea>
+        <div class="d-flex">
+          <button class="btn btn-primary" id="submitVoting">
+            Submit Voting
+          </button>
+          <div id="error_submitVoting" class="text-danger mx-3"></div>
+        </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <h2>Add Appointment</h2>
-          <form id="addAppointmentForm">
-            <div class="mb-3">
-              <label for="title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="title" required />
-            </div>
-            <div class="mb-3">
-              <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" id="location" required />
-            </div>
-            <div class="mb-3">
-              <label for="date" class="form-label">Date</label>
-              <input type="date" class="form-control" id="date" required />
-            </div>
-            <div class="mb-3">
-              <label for="expiryDate" class="form-label">Expiry Date</label>
-              <input
-                type="date"
-                class="form-control"
-                id="expiryDate"
-                required
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">
-              Add Appointment
-            </button>
-          </form>
-        </div>
+      <div class="col-sm"></div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h2>Add Appointment</h2>
+        <form id="addAppointmentForm">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" required />
+          </div>
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" required />
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" required />
+          </div>
+          <div class="mb-3">
+            <label for="expiryDate" class="form-label">Expiry Date</label>
+            <input type="date" class="form-control" id="expiryDate" required />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Add Appointment
+          </button>
+        </form>
       </div>
     </div>
-  </body>
-  <script src="js/jquery-3.7.1.min.js"></script>
-  <script src="js/controller.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"
-  ></script>
+  </div>
+</body>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/controller.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 </html>
