@@ -3,8 +3,8 @@
 export function resetAppointmentDetails() {
     $("#appointmentTitle").empty();
     $("#appointmentLocation").empty();
-    $("#appointmentDate").val("");
-    $("#appointmentExpiryDate").val("");
+    $("#appointmentDate").empty();
+    $("#appointmentExpiryDate").empty();
     $("#availableAppointmentOptions").empty();
     $("#error_appointmentOption").text("");
 }

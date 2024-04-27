@@ -1,4 +1,5 @@
 import { resetAppointmentOptionForm, resetAppointmentDetails, resetSubmitVotingForm, closeAllAccordions } from "../utils/reset.js";
+import { formatDate } from "../utils/date.js";
 
 // Funktion zum Laden eines Termins anhand der ID
 export function loadAppointmentById(id) {
@@ -33,8 +34,8 @@ export function createAppointmentDetails(appointment) {
     console.log(appointment);
     $("#appointmentTitle").text(appointment.title);
     $("#appointmentLocation").text(appointment.location);
-    $("#appointmentDate").val(appointment.date);
-    $("#appointmentExpiryDate").val(appointment.expiryDate);
+    $("#appointmentDate").text(formatDate(appointment.date));
+    $("#appointmentExpiryDate").text(formatDate(appointment.expiryDate));
 
     var currentDate = new Date();
     var expiryDate = new Date(appointment.expiryDate);

@@ -13,7 +13,9 @@
 <body>
   <div class="container-fluid">
     <div class="row">
+      <div id="detailsHidden" class="col-lg"></div>
       <div class="col-12 col-lg-6">
+        <h2>Appointment List</h2>
         <table class="table table-primary">
           <thead>
             <tr>
@@ -32,10 +34,11 @@
         <div id="appointmentDetailsDescription">
           <h2>Appointment Details</h2>
           <div id="appointmentDetails_loading" style="display: none;">Loading...</div>
-          <h3 id="appointmentTitle"></h3>
-          <p id="appointmentLocation"></p>
-          <input type="date" id="appointmentDate" disabled />
-          <input type="date" id="appointmentExpiryDate" disabled />
+
+          <h3>Title: <u><text id="appointmentTitle"></text></u></h3>
+          <h6>Location: <u><text id="appointmentLocation"></text></u></h6>
+          <h6>Date: <u><text id="appointmentDate"></text></u></h6>
+          <h6>Voting Expiry Date: <u><text id="appointmentExpiryDate"></text></u></h6>
         </div>
         <table class="table table-primary">
           <thead>
@@ -116,7 +119,8 @@
       <div class="col-sm"></div>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col"></div>
+      <div class="col-6">
         <h2>Add Appointment</h2>
         <form id="addAppointmentForm">
           <div class="mb-3">
@@ -143,6 +147,7 @@
           </div>
         </form>
       </div>
+      <div class="col"></div>
     </div>
   </div>
 </body>

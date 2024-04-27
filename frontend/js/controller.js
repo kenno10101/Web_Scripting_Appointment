@@ -51,9 +51,29 @@ $("#addAppointmentForm").submit(function (event) {
 });
 
 // Funktion zum Anzeigen der Termindetails
+var currentBtn;
+var detailsOpen = false;
 $(document).on("click", ".view-btn", function () {
     var index = $(this).closest("tr").attr("id").replace("appointment", "");
     viewAppointment(index);
+
+    // Setzt Klassen und Text zurück des voherigen Hide Buttons
+    detailsOpen == true ? (currentBtn.removeClass("hide-btn"), currentBtn.addClass("view-btn"), currentBtn.text("View Details")) : (detailsOpen = true);
+    currentBtn = $(this);
+    $("#detailsHidden").removeClass("col-lg");
+    currentBtn.removeClass("view-btn");
+    currentBtn.addClass("hide-btn");
+    currentBtn.text("Hide Details");
+});
+
+// Funktion zum Ausblenden der Termindetails
+$(document).on("click", ".hide-btn", function () {
+    detailsOpen = false;
+    $("#detailsHidden").addClass("col-lg");
+    $(this).addClass("view-btn");
+    $(this).removeClass("hide-btn");
+    $(this).text("View Details");
+    $("#appointmentDetails").hide();
 });
 
 
