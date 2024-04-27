@@ -16,7 +16,26 @@ $(document).ready(function () {
 // Funktion zum Hinzufügen eines Termins
 $("#addAppointmentForm").submit(function (event) {
     event.preventDefault();
+    var title = $("#title").val();
+    var location = $("#location").val();
+    var date = $("#date").val();
+    var expiryDate = $("#expiryDate").val();
 
+    if (title.trim() == "" || location.trim() == "" || date.trim() == "" || expiryDate.trim() == "") {
+        $("#error_appointment").text("Input is required.");
+        title.trim() == "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
+        location.trim() == "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
+        date.trim() == "" ? $("#date").addClass("is-invalid") : $("#date").removeClass("is-invalid");
+        expiryDate.trim() == "" ? $("#expiryDate").addClass("is-invalid") : $("#expiryDate").removeClass("is-invalid");
+        return;
+    }
+    if (expiryDate > date) {
+        $("#error_appointment").text("Voting Expiry Date cannot be after Appointment Date.");
+        title.trim() == "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
+        location.trim() == "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
+        expiryDate > date ? ($("#date").addClass("is-invalid"), $("#expiryDate").addClass("is-invalid")) : ($("#date").removeClass("is-invalid"), $("#expiryDate").removeClass("is-invalid"));
+        return;
+    }
     var appointment = {
         method: "addAppointment",
         param: {

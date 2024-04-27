@@ -32,6 +32,11 @@ export function resetAppointmentForm() {
     $("#location").val("");
     $("#date").val("");
     $("#expiryDate").val("");
+    $("#title").removeClass("is-invalid");
+    $("#location").removeClass("is-invalid");
+    $("#date").removeClass("is-invalid");
+    $("#expiryDate").removeClass("is-invalid");
+    $("#error_appointment").text("");
 }
 
 export function closeAllAccordions() {

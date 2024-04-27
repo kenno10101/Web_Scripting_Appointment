@@ -121,23 +121,26 @@
         <form id="addAppointmentForm">
           <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" required />
+            <input type="text" class="form-control" id="title" />
           </div>
           <div class="mb-3">
             <label for="location" class="form-label">Location</label>
-            <input type="text" class="form-control" id="location" required />
+            <input type="text" class="form-control" id="location" />
           </div>
           <div class="mb-3">
             <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" id="date" required />
+            <input type="date" class="form-control" id="date" />
           </div>
           <div class="mb-3">
             <label for="expiryDate" class="form-label">Expiry Date</label>
-            <input type="date" class="form-control" id="expiryDate" required />
+            <input type="date" class="form-control" id="expiryDate" />
           </div>
-          <button type="submit" class="btn btn-primary">
-            Add Appointment
-          </button>
+          <div class="d-flex">
+            <button type="submit" class="btn btn-primary">
+              Add Appointment
+            </button>
+            <div id="error_appointment" class="text-danger mx-3"></div>
+          </div>
         </form>
       </div>
     </div>
