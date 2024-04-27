@@ -69,6 +69,12 @@ $("#submitAppointmentOption").click(function () {
         return;
     }
 
+    if (startTime > endTime) {
+        $("#error_appointmentOption").text("Start time cannot be after End time.");
+        startTime > endTime ? ($("#startTime").addClass("is-invalid"), $("#endTime").addClass("is-invalid")) : ($("#startTime").removeClass("is-invalid"), $("#endTime").removeClass("is-invalid"));
+        return;
+    }
+
 
     var appointmentOption = {
         method: "addAppointmentOption",
