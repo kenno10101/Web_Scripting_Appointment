@@ -33,6 +33,13 @@ export function loadVotingsByAppointmentId(appointment_id) {
         complete: function () {
             // Hide the loading sign
             $("#votings_loading").hide();
+        },
+        error: function (error) {
+            console.log("no votings");
+            $("#votings").append(`
+                <div>No votings or comments have been made.</div>
+                `);
+            console.log(`Error ${error}`);
         }
     });
 }

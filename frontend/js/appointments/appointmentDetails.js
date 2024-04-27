@@ -45,8 +45,10 @@ export function createAppointmentDetails(appointment) {
 
     if (isExpired) {
         $('#timeOptionAccordion').hide();
+        $('#votingForm').hide();
     } else {
         $('#timeOptionAccordion').show();
+        $('#votingForm').show();
     }
 
 
