@@ -12,6 +12,7 @@ class DataHandler
         $this->conn = $conn;
     }
 
+    // Query all appointments options/timeslots from an appointment from the database
     public function queryAppointmentOptionsByAppointmentId($id)
     {
         $sql = "SELECT * FROM appointment_options WHERE appointment_fk = ?";
@@ -32,6 +33,8 @@ class DataHandler
 
         return $options;
     }
+
+    // Query all appointments from the database
     public function queryAppointments()
     {
 
@@ -53,6 +56,7 @@ class DataHandler
         return $appointments;
     }
 
+    // Query a single appointment by its ID
     public function queryAppointmentById($id)
     {
 
@@ -71,6 +75,7 @@ class DataHandler
         return $appointment->toArray();
     }
 
+    // Query all votings from an appointment from the database
     public function queryVotingsByAppointmentId($id)
     {
         $sql = "SELECT * FROM appointment_options INNER JOIN voting_list ON appointment_options.options_id = voting_list.option_fk INNER JOIN options_voting ON voting_list.voting_fk = options_voting.voting_id WHERE appointment_fk = ?";
@@ -97,13 +102,7 @@ class DataHandler
         return $votings;
     }
 
-    public function queryAppointmentOptionById($id)
-    {
-
-
-
-    }
-
+    // Insert a new appointment into the database
     public function addAppointment($appointment)
     {
 
@@ -115,6 +114,7 @@ class DataHandler
         return $stmt->insert_id;
     }
 
+    // Insert a new appointment option into the database
     public function addTimeOption($timeOption)
     {
         $sql = "INSERT INTO appointment_options (appointment_fk, start_time, end_time) VALUES (?, ?, ?)";
@@ -124,6 +124,7 @@ class DataHandler
         return $stmt->insert_id;
     }
 
+    // Insert new votes into the database
     public function addVotes($votes)
     {
         $sql = "INSERT INTO options_voting (name, comment) VALUES (?, ?)";
@@ -135,6 +136,7 @@ class DataHandler
 
         return $inserted_id;
     }
+    // Insert new votes in an intermediate table into the database
     public function addVoteIntoVotingList($votes, $inserted_id)
     {
         foreach ($votes as $vote) {

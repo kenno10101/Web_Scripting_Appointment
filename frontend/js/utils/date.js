@@ -1,4 +1,3 @@
-
 export function formatDate(date) {
     date = new Date(date);
     var day = ("0" + date.getDate()).slice(-2);

@@ -1,5 +1,3 @@
-//TODO: outsource in Utils file
-
 export function resetAppointmentDetails() {
     $("#appointmentTitle").empty();
     $("#appointmentLocation").empty();

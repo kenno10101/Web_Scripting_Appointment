@@ -56,7 +56,7 @@ export function createAppointmentList(data) {
 }
 
 
-
+// Funktion zum Hinzufügen eines Termins
 export function addAppointment(appointment) {
     $.ajax({
         type: "POST",

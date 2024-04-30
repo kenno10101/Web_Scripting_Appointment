@@ -1,4 +1,3 @@
-//TODO: create different files for each function group
 import { loadAppointments } from "./appointments/appointments.js";
 import { addAppointment } from "./appointments/appointments.js";
 import { loadAppointmentById } from "./appointments/appointmentDetails.js";
@@ -21,6 +20,7 @@ $("#addAppointmentForm").submit(function (event) {
     var date = $("#date").val();
     var expiryDate = $("#expiryDate").val();
 
+    // Error Handling (Felder dürfen nicht leer sein und das Ablaufdatum darf nicht nach dem Termin liegen)
     if (title.trim() == "" || location.trim() == "" || date.trim() == "" || expiryDate.trim() == "") {
         $("#error_appointment").text("Input is required.");
         title.trim() == "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
@@ -36,6 +36,8 @@ $("#addAppointmentForm").submit(function (event) {
         expiryDate > date ? ($("#date").addClass("is-invalid"), $("#expiryDate").addClass("is-invalid")) : ($("#date").removeClass("is-invalid"), $("#expiryDate").removeClass("is-invalid"));
         return;
     }
+
+    // Erstellen des Termins als Objekt und Aufruf der Methode zum Hinzufügen
     var appointment = {
         method: "addAppointment",
         param: {
@@ -82,6 +84,7 @@ $("#submitAppointmentOption").click(function () {
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
 
+    // Error Handling (Felder dürfen nicht leer sein und die Startzeit darf nicht nach der Endzeit liegen)
     if (startTime.trim() == "" || endTime.trim() == "") {
         $("#error_appointmentOption").text("Input is required.");
         startTime.trim() == "" ? $("#startTime").addClass("is-invalid") : $("#startTime").removeClass("is-invalid");
@@ -95,7 +98,7 @@ $("#submitAppointmentOption").click(function () {
         return;
     }
 
-
+    // Erstellen der Zeitoption als Objekt und Aufruf der Methode zum Hinzufügen
     var appointmentOption = {
         method: "addAppointmentOption",
         param: {
@@ -115,6 +118,7 @@ $("#submitVoting").click(function () {
     var name = $("#name").val();
     var comment = $("#comment").val();
 
+    // Error Handling (Felder dürfen nicht leer sein und mindestens eine Zeitoption muss ausgewählt sein)
     if (name == "" || $(".appointmentOption:checked").length == 0) {
         $("#error_submitVoting").text("Input is required.");
         name == "" ? $("#name").addClass("is-invalid") : $("#name").removeClass("is-invalid");
