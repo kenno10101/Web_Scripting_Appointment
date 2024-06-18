@@ -53,7 +53,7 @@ export function createAppointmentDetails(appointment) {
 
 
     // Loop through the available times and add a new list item for each entry
-    if (appointment.options.length == 0) {
+    if (appointment.options.length === 0) {
         $("#availableAppointmentOptions").append(`
         <tr><td>No available times</td><td></td><td></td></tr>     `);
     } else {

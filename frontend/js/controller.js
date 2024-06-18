@@ -21,18 +21,18 @@ $("#addAppointmentForm").submit(function (event) {
     var expiryDate = $("#expiryDate").val();
 
     // Error Handling (Felder dürfen nicht leer sein und das Ablaufdatum darf nicht nach dem Termin liegen)
-    if (title.trim() == "" || location.trim() == "" || date.trim() == "" || expiryDate.trim() == "") {
+    if (title.trim() === "" || location.trim() === "" || date.trim() === "" || expiryDate.trim() === "") {
         $("#error_appointment").text("Input is required.");
-        title.trim() == "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
-        location.trim() == "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
-        date.trim() == "" ? $("#date").addClass("is-invalid") : $("#date").removeClass("is-invalid");
-        expiryDate.trim() == "" ? $("#expiryDate").addClass("is-invalid") : $("#expiryDate").removeClass("is-invalid");
+        title.trim() === "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
+        location.trim() === "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
+        date.trim() === "" ? $("#date").addClass("is-invalid") : $("#date").removeClass("is-invalid");
+        expiryDate.trim() === "" ? $("#expiryDate").addClass("is-invalid") : $("#expiryDate").removeClass("is-invalid");
         return;
     }
     if (expiryDate > date) {
         $("#error_appointment").text("Voting Expiry Date cannot be after Appointment Date.");
-        title.trim() == "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
-        location.trim() == "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
+        title.trim() === "" ? $("#title").addClass("is-invalid") : $("#title").removeClass("is-invalid");
+        location.trim() === "" ? $("#location").addClass("is-invalid") : $("#location").removeClass("is-invalid");
         expiryDate > date ? ($("#date").addClass("is-invalid"), $("#expiryDate").addClass("is-invalid")) : ($("#date").removeClass("is-invalid"), $("#expiryDate").removeClass("is-invalid"));
         return;
     }
@@ -60,7 +60,7 @@ $(document).on("click", ".view-btn", function () {
     viewAppointment(index);
 
     // Setzt Klassen und Text zurück des voherigen Hide Buttons
-    detailsOpen == true ? (currentBtn.removeClass("hide-btn"), currentBtn.addClass("view-btn"), currentBtn.text("View Details")) : (detailsOpen = true);
+    detailsOpen === true ? (currentBtn.removeClass("hide-btn"), currentBtn.addClass("view-btn"), currentBtn.text("View Details")) : (detailsOpen = true);
     currentBtn = $(this);
     $("#detailsHidden").removeClass("col-lg");
     currentBtn.removeClass("view-btn");
@@ -85,10 +85,10 @@ $("#submitAppointmentOption").click(function () {
     var endTime = $("#endTime").val();
 
     // Error Handling (Felder dürfen nicht leer sein und die Startzeit darf nicht nach der Endzeit liegen)
-    if (startTime.trim() == "" || endTime.trim() == "") {
+    if (startTime.trim() === "" || endTime.trim() === "") {
         $("#error_appointmentOption").text("Input is required.");
-        startTime.trim() == "" ? $("#startTime").addClass("is-invalid") : $("#startTime").removeClass("is-invalid");
-        endTime.trim() == "" ? $("#endTime").addClass("is-invalid") : $("#endTime").removeClass("is-invalid");
+        startTime.trim() === "" ? $("#startTime").addClass("is-invalid") : $("#startTime").removeClass("is-invalid");
+        endTime.trim() === "" ? $("#endTime").addClass("is-invalid") : $("#endTime").removeClass("is-invalid");
         return;
     }
 
@@ -119,10 +119,10 @@ $("#submitVoting").click(function () {
     var comment = $("#comment").val();
 
     // Error Handling (Felder dürfen nicht leer sein und mindestens eine Zeitoption muss ausgewählt sein)
-    if (name == "" || $(".appointmentOption:checked").length == 0) {
+    if (name === "" || $(".appointmentOption:checked").length === 0) {
         $("#error_submitVoting").text("Input is required.");
-        name == "" ? $("#name").addClass("is-invalid") : $("#name").removeClass("is-invalid");
-        $(".appointmentOption:checked").length == 0 ? $("#error_votingCheckbox").text("Please select at least one time option.") : $("#error_votingCheckbox").text("");
+        name === "" ? $("#name").addClass("is-invalid") : $("#name").removeClass("is-invalid");
+        $(".appointmentOption:checked").length === 0 ? $("#error_votingCheckbox").text("Please select at least one time option.") : $("#error_votingCheckbox").text("");
 
         return;
     }
